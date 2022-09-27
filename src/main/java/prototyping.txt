@@ -1,0 +1,7 @@
+teacher -> class
+
+group -> class
+
+Lesson -> teacher
+        -> class
+        -> Date
