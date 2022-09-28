@@ -6,8 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDateTime;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Schedule {
@@ -17,32 +16,38 @@ public class Schedule {
     public void createScheduleForGroup(String groupName){
         List<Lesson> lessons = DB.getAllLessonsByGroup(groupName);
         List<Calendar> days = lessons.stream().map(Lesson::getStartTime).toList();
-
-
-        for(int x=1; x<=7; x++){
-
-        for(int i=0; i<lessons.size(); i++){
-
-            Calendar start = lessons.get(i).getStartTime();
-            Calendar end = lessons.get(i).getEndTIme();
-
-
-
+        Map<String, List<Lesson>> lessonsByDay = lessons.stream().collect(Collectors.groupingBy(l->{
             DateFormat formatter = new SimpleDateFormat("EEEE");
-            String dayOfWeekString = formatter.format(start.getTime());
-            int dayOfWeekNum = start.get(Calendar.DAY_OF_WEEK);
+            return formatter.format(l.getStartTime().getTime());
+        }));
 
-//            start.setFirstDayOfWeek(3);
+        lessonsByDay.get("Monday");
+        Set<String> keys = lessonsByDay.keySet();
 
-            System.out.println(DayName.getDayName(x));
-            if(DayName.getDayName(x).equals(dayOfWeekString)){
-                System.out.print("Day from Sched "+dayOfWeekString+"    " + lessons.get(i).getSubject() + "       ");
+
+        DateFormat formatterTime = new SimpleDateFormat("h:mm a");
+        for(int i=1; i<=7; i++){
+            String dayOfWeek = DayName.getDayName(i);
+            List<Lesson> lessonsDayly = lessonsByDay.get(dayOfWeek);
+            System.out.println(dayOfWeek);
+            if(lessonsDayly!=null) {
+                for (Lesson l : lessonsDayly) {
+                    String subj = l.getSubject().toString();
+                    Date d = l.getStartTime().getTime();
+                    System.out.println();
+
+                    System.out.print("    ");
+                    System.out.print(subj);
+                    System.out.print("    ");
+                    System.out.print(formatterTime.format(l.getStartTime().getTime()) + "  -  " + formatterTime.format(l.getEndTIme().getTime()));
+                }
+                System.out.println();
             }
+        }
 
 
-            }
 
 
-        }System.out.println();
+
     }
 }
