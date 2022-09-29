@@ -1,4 +1,4 @@
-package model;
+package utils;
 
 public class DayName {
         public static String getDayName(int weekday) {
