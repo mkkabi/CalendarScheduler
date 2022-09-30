@@ -11,13 +11,5 @@ public class Start {
         Schedule schedule = new Schedule();
         schedule.createScheduleForGroup("One");
 
-        Set<String> set = new HashSet<>();
-        set.add("One");
-        set.add("Two");
-        set.add("One");
-
-        for(String s : set){
-            System.out.println(s);
-        }
     }
 }
